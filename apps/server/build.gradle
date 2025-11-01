@@ -36,6 +36,10 @@ dependencies {
 	implementation 'org.springframework.ai:spring-ai-advisors-vector-store'
 	implementation 'org.springframework.ai:spring-ai-starter-model-bedrock'
 	implementation 'org.springframework.ai:spring-ai-starter-model-bedrock-converse'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// ✅ Spring Data Elasticsearch 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 	implementation 'org.springframework.ai:spring-ai-starter-vector-store-elasticsearch'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
