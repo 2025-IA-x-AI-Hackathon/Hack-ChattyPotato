@@ -4,6 +4,7 @@ import ia_x_ai_hackathon.chatty_potato.common.resolver.UserId;
 import ia_x_ai_hackathon.chatty_potato.rag.dto.RagResultDto;
 import ia_x_ai_hackathon.chatty_potato.rag.dto.RewriteReqDto;
 import ia_x_ai_hackathon.chatty_potato.rag.dto.RewriteResDto;
+import ia_x_ai_hackathon.chatty_potato.rag.dto.RouteReqDto;
 import ia_x_ai_hackathon.chatty_potato.rag.pipe.RagPipelineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,11 @@ public class RAGController {
 	@ResponseStatus(HttpStatus.OK)
 	public RagResultDto high(
 			@UserId String userId,
-			@RequestParam String taskId,
+			@RequestBody RouteReqDto routeReqDto,
 			@RequestParam(defaultValue = "10000") long waitMillis,
 			@RequestParam(defaultValue = "200") long stepMillis
 	) {
-		return ragPipelineService.produce(userId, taskId, waitMillis, stepMillis);
+		return ragPipelineService.produce(userId, routeReqDto.taskId(), routeReqDto.isLow(),waitMillis, stepMillis);
 	}
 
 }

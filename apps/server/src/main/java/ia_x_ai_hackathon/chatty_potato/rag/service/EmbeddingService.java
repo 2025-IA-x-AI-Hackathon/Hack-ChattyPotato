@@ -1,14 +1,16 @@
 package ia_x_ai_hackathon.chatty_potato.rag.service;
 
 import ia_x_ai_hackathon.chatty_potato.rag.dto.EmbeddingResultDto;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.bedrock.titan.BedrockTitanEmbeddingModel;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
 import org.springframework.ai.embedding.EmbeddingResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * AWS Bedrock Titan Embeddings를 사용한 임베딩 서비스
@@ -17,12 +19,15 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class EmbeddingService {
 
-    private final BedrockTitanEmbeddingModel embeddingModel;
 
-    private static final int EMBEDDING_DIMENSIONS = 1024; // Titan v1 기본 차원
+    private final EmbeddingModel embeddingModel;
+	private static final int EMBEDDING_DIMENSIONS = 1024;
+
+	public EmbeddingService(@Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel) {
+		this.embeddingModel = embeddingModel;
+	}
 
     /**
      * 텍스트를 벡터로 변환

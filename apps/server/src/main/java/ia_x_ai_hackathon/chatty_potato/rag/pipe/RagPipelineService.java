@@ -169,7 +169,7 @@ public class RagPipelineService {
 		}
 	}
 
-	public RagResultDto produce(String userId, String taskId, long waitMillis, long stepMillis) {
+	public RagResultDto produce(String userId, String taskId, boolean isLow, long waitMillis, long stepMillis) {
 		// 1) 데드라인-폴링으로 프롬프트 확보
 		PromptAssemblyDto prompt = awaitPrompt(userId, taskId, waitMillis, stepMillis);
 
@@ -177,8 +177,22 @@ public class RagPipelineService {
 		var slot = inMemoryStore.get(userId, taskId)
 				.orElseThrow(() -> new TaskNotFoundException(userId, taskId));
 
-		// 3) 하이 LLM 동기 호출
-		String answer = generatorService.generateAnswer(prompt);
+
+
+		if (isLow) {
+			return new RagResultDto(
+					taskId,                // sessionId로 taskId 사용
+					slot.getOriginal(),    // originalQuery
+					slot.getRewritten(),   // rewrittenQuery
+					null,                // answer
+					prompt,                // prompt dto
+					slot.getAugmentedContext().citations(),    // citations
+					Instant.now()
+			);
+		}
+
+			// 3) 하이 LLM 동기 호출
+			String answer = generatorService.generateAnswer(prompt);
 
 		// 4) DTO 조립
 		return new RagResultDto(
