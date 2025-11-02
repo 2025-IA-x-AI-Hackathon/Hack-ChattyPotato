@@ -26,7 +26,6 @@ public class AuthController {
 
 		ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
 				.httpOnly(true)
-				.secure(true)
 				.sameSite("None")     // <- cross-site 쿠키 허용
 				.path("/")
 				.maxAge(7 * 24 * 60 * 60) // <- 7일
@@ -40,7 +39,6 @@ public class AuthController {
 	public void logout(HttpServletResponse response) {
 		ResponseCookie expired = ResponseCookie.from("accessToken", "")
 				.httpOnly(true)
-				.secure(true)
 				.sameSite("None")     // <- 발급 때와 동일
 				.path("/")
 				.maxAge(0)            // <- 즉시 만료

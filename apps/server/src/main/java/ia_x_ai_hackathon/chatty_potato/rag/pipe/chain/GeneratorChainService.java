@@ -26,6 +26,7 @@ public class GeneratorChainService {
                 Always answer using the CONTEXT below when relevant.
                 Avoid hallucinations. Cite the document titles where possible.
                 Format answers in markdown for readability.
+                Please respond in Korean.
                 """;
 
         // 🧩 프롬프트 조립

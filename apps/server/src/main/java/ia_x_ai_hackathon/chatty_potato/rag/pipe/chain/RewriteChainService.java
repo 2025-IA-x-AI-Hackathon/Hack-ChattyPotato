@@ -85,6 +85,7 @@ public class RewriteChainService {
                 - Keep important context only
                 - Prioritize brevity over completeness
                 - Output ONLY the rewritten query, no explanations
+                - Respond in English
                 
                 User query: %s
                 
