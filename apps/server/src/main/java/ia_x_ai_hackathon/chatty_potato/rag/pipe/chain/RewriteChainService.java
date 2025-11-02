@@ -42,7 +42,7 @@ public class RewriteChainService {
         }
 
         try {
-            log.debug("Rewriting query: '{}'", userQuery);
+            log.error("Rewriting query: '{}'", userQuery);
 
             String rewrittenQuery = rewriteWithLLM(userQuery);
 
@@ -50,11 +50,11 @@ public class RewriteChainService {
 
             // 토큰 제한 경고
             if (result.rewrittenTokens() > MAX_REWRITE_TOKENS) {
-                log.warn("Rewritten query exceeds token limit: {} > {} tokens",
+                log.error("Rewritten query exceeds token limit: {} > {} tokens",
                         result.rewrittenTokens(), MAX_REWRITE_TOKENS);
             }
 
-            log.info("Query rewritten: {} -> {} (tokens: {} -> {})",
+            log.error("Query rewritten: {} -> {} (tokens: {} -> {})",
                     truncate(userQuery, 50),
                     truncate(rewrittenQuery, 50),
                     result.originalTokens(),
