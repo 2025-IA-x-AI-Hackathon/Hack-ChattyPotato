@@ -11,6 +11,7 @@ import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.bedrock.titan.BedrockTitanEmbeddingModel;
 import org.springframework.ai.bedrock.titan.api.TitanEmbeddingBedrockApi;
 
+import org.springframework.context.annotation.Primary;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -18,13 +19,14 @@ import software.amazon.awssdk.regions.Region;
 @Configuration
 public class BedrockEmbeddingConfig {
 
-    @Value("${spring.ai.bedrock.aws.region:us-east-1}")
+    @Value("${spring.ai.bedrock.aws.region:ap-northeast-2}")
     private String awsRegion;
 
     @Bean
+	@Primary
     public EmbeddingModel bedrockTitanEmbeddingModel(ObservationRegistry observationRegistry) {
         // 1️⃣ Titan 모델 ID
-        String modelId = TitanEmbeddingBedrockApi.TitanEmbeddingModel.TITAN_EMBED_TEXT_V1.id();
+        String modelId = TitanEmbeddingBedrockApi.TitanEmbeddingModel.TITAN_EMBED_TEXT_V2.id();
 
         // 2️⃣ AWS 자격 증명
         AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.builder().build();
