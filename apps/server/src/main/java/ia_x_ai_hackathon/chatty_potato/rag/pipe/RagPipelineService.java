@@ -10,6 +10,9 @@ import ia_x_ai_hackathon.chatty_potato.rag.pipe.chain.AugmentedChainService;
 import ia_x_ai_hackathon.chatty_potato.rag.pipe.chain.GeneratorChainService;
 import ia_x_ai_hackathon.chatty_potato.rag.pipe.chain.RetrieverChainService;
 import ia_x_ai_hackathon.chatty_potato.rag.pipe.chain.RewriteChainService;
+import ia_x_ai_hackathon.chatty_potato.rag.repository.DocumentRepository;
+import ia_x_ai_hackathon.chatty_potato.rag.service.EmbeddingService;
+import ia_x_ai_hackathon.chatty_potato.rag.service.VectorStoreService;
 import ia_x_ai_hackathon.chatty_potato.rag.store.InMemoryStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -36,6 +40,8 @@ public class RagPipelineService {
 	private final AugmentedChainService augmentedService;   // context 조립
 	private final GeneratorChainService generatorService;        // LLM 호출
 	private final InMemoryStore inMemoryStore;
+	private final VectorStoreService vectorStoreService;
+	private final EmbeddingService embeddingService;
 
 	/**
 	 * 단일 쿼리에 대한 RAG 전체 실행
@@ -193,6 +199,17 @@ public class RagPipelineService {
 
 			// 3) 하이 LLM 동기 호출
 			String answer = generatorService.generateAnswer(prompt);
+
+		vectorStoreService.save(
+				answer,
+				Map.of(
+						"originalQuery", slot.getOriginal(),
+						"rewrittenQuery", slot.getRewritten(),
+						"taskId", taskId,
+						"userId", userId,
+						"createdAt", Instant.now().toString()
+				)
+		);
 
 		// 4) DTO 조립
 		return new RagResultDto(

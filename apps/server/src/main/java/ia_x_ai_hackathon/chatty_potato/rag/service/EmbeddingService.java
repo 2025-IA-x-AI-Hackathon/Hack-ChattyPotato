@@ -1,7 +1,6 @@
 package ia_x_ai_hackathon.chatty_potato.rag.service;
 
 import ia_x_ai_hackathon.chatty_potato.rag.dto.EmbeddingResultDto;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingRequest;
@@ -21,12 +20,13 @@ import java.util.stream.Collectors;
 @Service
 public class EmbeddingService {
 
-
+	private final VectorStoreService vectorStoreService;
     private final EmbeddingModel embeddingModel;
 	private static final int EMBEDDING_DIMENSIONS = 1024;
 
-	public EmbeddingService(@Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel) {
+	public EmbeddingService(@Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel, VectorStoreService vectorStoreService) {
 		this.embeddingModel = embeddingModel;
+		this.vectorStoreService = vectorStoreService;
 	}
 
     /**
